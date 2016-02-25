@@ -1,0 +1,21 @@
+{
+  "name": "app",
+  "version": "0.0.1",
+  "description": "接口数据模拟及接口跨域代理",
+  "author": {
+    "name": "枫星辰",
+    "email": "ifxc@qq.com",
+    "url": "http://ifxc.me"
+  },
+  "devDependencies": {
+    "koa": "^1.1.1",
+    "koa-body": "^1.3.0",
+    "koa-logger": "^1.3.0",
+    "koa-proxy": "^0.4.1",
+    "koa-router": "^5.2.3",
+    "koa-session": "^3.3.1",
+    "koa-static": "^1.5.2",
+    "koa-validate": "^0.2.11",
+    "mockjs": "^0.1.10"
+  }
+}
