@@ -17,6 +17,12 @@
 * Mock.js 模拟数据生成器 文档：http://mockjs.com/
 * koa-validate 数据验证 文档：https://github.com/RocksonZeta/koa-validate
 
+### option
+    example: node app.js -h http://192.168.1.199:48068 -p 3000 -d ../third_party/static
+* -h, --host<address>: 设置代理地址(带端口)
+* -p, --port<number>: 设置服务启动端口
+* -d, --dir<path>: 设置html等静态资源访问的根路径
+
 ##  Example
 ### post请求可模拟验证，post->http://localhost:3000/api/mock/test
     req:

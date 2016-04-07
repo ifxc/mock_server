@@ -4,13 +4,19 @@
  */
 
 module.exports = function(){
+  var program = require('commander');
+  program
+      .option('-h, --host<address>', 'set proxy host')
+      .option('-p, --port<number>', 'set port')
+      .option('-d, --dir<path>', 'set path')
+      .parse(process.argv);
   return {
-    port: 3000, //服务启动端口
+    port: program['port<number>'] || 3000, //服务启动端口
     apiPrefix: '/api/mock/', //api前缀
-    path: '../', //静态资源路径__dirname | C:\Users\fxc\Desktop\mywork
+    path: program['dir<path>'] || '../', //静态资源路径__dirname | C:\Users\fxc\Desktop\mywork
     keys: ['administration','admin','system','user','guest'],
     proxy: {
-      host:  'http://192.168.1.201:48169',  //代理地址
+      host:  program['host<address>'] || 'http://weixin.wjiuy.com:5144',  //代理地址
       map: {   //代理路径映射
         '/mjson' : '/mjson',
         '/site_manager' : '/site_manager',
