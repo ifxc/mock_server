@@ -1,52 +1,83 @@
-## 安装
-### 1.检查是否存在node环境与版本号
-    node -v  //保证版本在v0.11以上
+## 一、Install & Run
+### 1.node version
+    node -v  //v0.11+
 
-### 2.安装相关模块
-    npm install --save-dev    //项目目录路径下
+### 2.install package
+    npm install mock-server
 
-### 3.修改相关配置
-* config.js  所有相关配置,可按需修改
-* data.js  所有模拟数据,可按需修改    
+### 3.example
+  ```js
+  var Server = require('./server');
+  var server = new Server({
+      port: 3000, //server start port
+      apiPrefix: '/api/mock/', //api prefix
+      responseType: 'json', //api mock data response type.  json|text
+      path:  '../', //static resource path. __dirname|C:\Users\fxc\Desktop\mywork
+      session: {key: 'user', isCheck: false},  //session config
+      proxy: {
+          host:  'https://cnodejs.org',  //proxy address
+          map: {   //proxy path mapping
+              '/api/v1': '/api/v1'
+          }
+      }
+  });
+  var Mock = server.Mock, Random = Mock.Random;
+  
+  //get request
+  server.data.set('number', {data: Mock.mock({"number|1-200": 100})}, 'get');
+  //validation field
+  server.data.set('user', {data: {id: Random.natural(1, 1000), email: Random.email()}});
+  server.data.setCheck('user', function (cx, key) {
+      cx.checkBody('username').eq('admin', "username isn't eq admin!");
+      if(cx.errors) return server.data.merge(server.data.tpl, {error: cx.errors});
+  });
+  //each request is random
+  server.data.set('user_info', function () {
+      return {data: {
+          id: Random.natural(1, 1000),
+          username: Random.name(),
+          name: Random.cname(),
+          email: Random.email(),
+          address: Random.county(true),
+          description: Random.cparagraph()
+      }};
+  });
+  
+  server.start();
+  ```
         
-### 4.运行服务
-    node app
+### 4.run
+    node example
+* get => /api/mock/number  200
+* post => /api/mock/user response: error mock data
+* post => /api/mock/user
+ request: {"username": "admin"}
+ response: success mock data  
+* post => /api/mock/user response: random mock data  
+* get => /api/v1/topics response:porxy data
         
-### 5.other
-* index.html  表单提交key进行session签名设置cookie
-* Mock.js 模拟数据生成器 文档：http://mockjs.com/
-* koa-validate 数据验证 文档：https://github.com/RocksonZeta/koa-validate
+### 5.option
+    example: node example.js -h http://192.168.1.199:48068 -p 3000 -d ../static
+* -h,--host<address>  set proxy host
+* -p,--port<number>  set server start port
+* -d,--dir<path>  set proxy path
 
-### 6.option
-    example: node app.js -h http://192.168.1.199:48068 -p 3000 -d ../third_party/static
-* -h, --host<address>: 设置代理地址(带端口)
-* -p, --port<number>: 设置服务启动端口
-* -d, --dir<path>: 设置html等静态资源访问的根路径
-
-##  Example
-### post请求可模拟验证，post->http://localhost:3000/api/mock/test
-    req:
-    {
-        "email": "ifxc.me"
-    }
-    res:
-    {
-      "code": -1,
-      "data": [
-        {
-          "email": "email格式不对"
-        }
-      ],
-      "id": null,
-      "msg": "操作失败"
-    }
-    
-    req:
-    {
-        "email": "1993@ifxc.me"
-    }
-    res:
-    {
-      "data": "success!!!"
-    }
-### get->http://localhost:3000/api/mock/get_list
+## 二、API
+###1.Server#start()
+    start server
+###2.Data#setTpl(t)    
+    set response data template
+###3.Data#set(apiname, data, method)    
+    set response api data
+###4.Data#get(apiname)    
+    get response api data
+###5.Data#getApiData()      
+    get all response api data
+##6.Data#setCheck(apiname, function)
+    set api data field validate function
+##7.Data#getCheck(apiname, function)
+    get api data field validate function
+        
+## 三、Other
+* Mock.js  doc： http://mockjs.com/
+* koa-validate  doc： https://github.com/RocksonZeta/koa-validate
