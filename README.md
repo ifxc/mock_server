@@ -3,7 +3,7 @@
     node -v  //v0.11+
 
 ### 2.install package
-    npm install mock-server
+    npm install mock_server
 
 ### 3.example
   ```js
@@ -78,6 +78,6 @@
 ##7.Data#getCheck(apiname, function)
     get api data field validate function
         
-## 三、Other
+## 三、Other docs
 * Mock.js  doc： http://mockjs.com/
 * koa-validate  doc： https://github.com/RocksonZeta/koa-validate
